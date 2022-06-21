@@ -1,55 +1,28 @@
 import signup from '../pages/SignupPage'
 
-describe('Cadastro', () => {
+describe('Cadastro', function() {
 
-    it('Usuário deve se tornar um entregador', () => {
+    beforeEach(function() {
+        cy.fixture('deliver').then((d)=>{
+            this.deliver = d
 
-        var deliver = {
-            name: 'Lidiane Monteiro',
-            cpf: '07746298435',
-            email: 'lidy@hotmail.com',
-            whatsapp: '11999999999',
-            address: {
-                postalcode: '52280519',
-                street: 'Rua Marialva',
-                number: '30',
-                details: 'Ap 142',
-                district: 'Vasco da Gama',
-                city_state: 'Recife/PE'
-            },
-            delivery_method: 'Moto',
-            cnh: 'cnh-digital.jpg'
-        }
+        })
+    })
+
+    it('Usuário deve se tornar um entregador', function() {
 
         signup.go()
-        signup.fillform(deliver)
+        signup.fillform(this.deliver.signup)
         signup.submit()
         const expectedMessage = 'Recebemos os seus dados. Fique de olho na sua caixa de email, pois e em breve retornamos o contato.'
         signup.modalContentShouldBe(expectedMessage)
   
     })
 
-    it('CPF incorreto', () => {
-
-        var deliver = {
-            name: 'Lidiane Monteiro',
-            cpf: '077462984BB',
-            email: 'lidy@hotmail.com',
-            whatsapp: '11999999999',
-            address: {
-                postalcode: '52280519',
-                street: 'Rua Marialva',
-                number: '30',
-                details: 'Ap 142',
-                district: 'Vasco da Gama',
-                city_state: 'Recife/PE'
-            },
-            delivery_method: 'Moto',
-            cnh: 'cnh-digital.jpg'
-        }
+    it('CPF incorreto', function() {
 
         signup.go()
-        signup.fillform(deliver)
+        signup.fillform(this.deliver.cpf_inv)
         signup.submit()
         const expectedMessage = 'Oops! CPF inválido'
         signup.alertMessageShouldBe(expectedMessage)
